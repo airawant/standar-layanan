@@ -2,9 +2,12 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Dashboard Monitoring Dokumen',
-  description: 'Aplikasi untuk menghimpun dokumen standar layanan dan SOP',
+  title: 'Monitoring Dokumen Standar Layanan dan SOP',
+  description: 'Kantor Kementerian Agama Kota Tanjungpinang',
   generator: 'Prakom',
+  icons: {
+    icon: "/logo.ico",
+  }
 }
 
 export default function RootLayout({

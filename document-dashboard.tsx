@@ -69,9 +69,10 @@ export default function DocumentDashboard() {
   const [dslServiceName, setDslServiceName] = useState("")
   const [dslUnit, setDslUnit] = useState("")
 
-  const API_URL = process.env.ENDPOINT_SOP // Ganti dengan URL API Google Apps Script
+  const API_URL =
+    "https://script.google.com/macros/s/AKfycbxtiFSoJymPF5UZJ_Z6XjmQyqpKmduvE7lpRaurPM54XZ2lSPsusGZoXlrSDAb9G73d/exec" // Ganti dengan URL API Google Apps Script
 
-  const API_STL = process.env.ENDPOINT_STL
+  const API_STL = "https://script.google.com/macros/s/AKfycbzA2qBSNL2aJAbY7pktt2iM16cCJ_aCunJzlNHnyk8t1I5KQNBCkDJNUoF3VYzLDh_e/exec"
 
   // Fetch data on component mount
   useEffect(() => {
@@ -434,7 +435,7 @@ export default function DocumentDashboard() {
               ) : (
                 <>
                   <div>
-                    <strong>Nama Layanan:</strong>
+                    <strong>Nama Layanan:</strong> 
                   </div>
                   <div>
                   {detailDocument.nama_stl || "-"}
@@ -488,13 +489,13 @@ export default function DocumentDashboard() {
                     {detailDocument.jml_pelaksana}
                   </div>
                   <div>
-                    <strong>Sarana dan Prasarana:</strong>
+                    <strong>Sarana dan Prasarana:</strong> 
                   </div>
                   <div>
                     {detailDocument.sarana}
                   </div>
                   <div>
-                    <strong>Kompetensi Pelaksana:</strong>
+                    <strong>Kompetensi Pelaksana:</strong> 
                   </div>
                   <div>
                     {detailDocument.kompetensi}
@@ -506,7 +507,7 @@ export default function DocumentDashboard() {
                     {detailDocument.pengawasan}
                   </div>
                   <div>
-                    <strong>Penanganan Aduan:</strong>
+                    <strong>Penanganan Aduan:</strong> 
                   </div>
                   <div>
                     {detailDocument.pengaduan}
@@ -518,19 +519,19 @@ export default function DocumentDashboard() {
                     {detailDocument.jaminan}
                   </div>
                   <div>
-                    <strong>Jaminan Keamanan:</strong>
+                    <strong>Jaminan Keamanan:</strong> 
                   </div>
                   <div>
                     {detailDocument.keamanan}
                   </div>
                   <div>
-                    <strong>Evaluasi Kinerja Pelaksana:</strong>
+                    <strong>Evaluasi Kinerja Pelaksana:</strong> 
                   </div>
                   <div>
                     {detailDocument.evaluasi}
                   </div>
                   <div>
-                    <strong>Tanggal Upload:</strong>
+                    <strong>Tanggal Upload:</strong> 
                   </div>
                   <div>
                     {detailDocument.tanggal_upload}
@@ -565,7 +566,7 @@ export default function DocumentDashboard() {
         </div>
       )}
       <h1 className="mb-6 text-2xl font-bold md:text-3xl">Dashboard Monitoring Dokumen</h1>
-
+      
       {/* Charts Section */}
       <div className="mb-8 grid gap-6 md:grid-cols-2">
         <Card>
@@ -644,7 +645,7 @@ export default function DocumentDashboard() {
                 <span>Tambah Dokumen Standar Layanan</span>
               </Button>
               <Button className="flex items-center gap-2" href="https://drive.google.com/drive/folders/1MUIp-qF1PhUwXjWJnbSUm8-xwoULUWHy?usp=drive_link" target="_blank">
-
+                
                 <span>Contoh Dokumen</span>
               </Button>
             </div>
@@ -984,8 +985,8 @@ export default function DocumentDashboard() {
                 placeholder="Masukkan jumlah pelaksana"
               />
             </div>
-
-
+            
+            
             <div className="grid gap-2">
               <Label htmlFor="dsl-file">File Dokumen (PDF)</Label>
               <Input id="dsl-file" type="file" accept=".pdf" onChange={(e) => handleFileChangeStl(e, setDslFile)} />
