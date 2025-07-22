@@ -435,7 +435,7 @@ export default function DocumentDashboard() {
               ) : (
                 <>
                   <div>
-                    <strong>Nama Layanan:</strong> 
+                    <strong>Nama Layanan:</strong>
                   </div>
                   <div>
                   {detailDocument.nama_stl || "-"}
@@ -489,13 +489,13 @@ export default function DocumentDashboard() {
                     {detailDocument.jml_pelaksana}
                   </div>
                   <div>
-                    <strong>Sarana dan Prasarana:</strong> 
+                    <strong>Sarana dan Prasarana:</strong>
                   </div>
                   <div>
                     {detailDocument.sarana}
                   </div>
                   <div>
-                    <strong>Kompetensi Pelaksana:</strong> 
+                    <strong>Kompetensi Pelaksana:</strong>
                   </div>
                   <div>
                     {detailDocument.kompetensi}
@@ -507,7 +507,7 @@ export default function DocumentDashboard() {
                     {detailDocument.pengawasan}
                   </div>
                   <div>
-                    <strong>Penanganan Aduan:</strong> 
+                    <strong>Penanganan Aduan:</strong>
                   </div>
                   <div>
                     {detailDocument.pengaduan}
@@ -519,19 +519,19 @@ export default function DocumentDashboard() {
                     {detailDocument.jaminan}
                   </div>
                   <div>
-                    <strong>Jaminan Keamanan:</strong> 
+                    <strong>Jaminan Keamanan:</strong>
                   </div>
                   <div>
                     {detailDocument.keamanan}
                   </div>
                   <div>
-                    <strong>Evaluasi Kinerja Pelaksana:</strong> 
+                    <strong>Evaluasi Kinerja Pelaksana:</strong>
                   </div>
                   <div>
                     {detailDocument.evaluasi}
                   </div>
                   <div>
-                    <strong>Tanggal Upload:</strong> 
+                    <strong>Tanggal Upload:</strong>
                   </div>
                   <div>
                     {detailDocument.tanggal_upload}
@@ -566,7 +566,7 @@ export default function DocumentDashboard() {
         </div>
       )}
       <h1 className="mb-6 text-2xl font-bold md:text-3xl">Dashboard Monitoring Dokumen</h1>
-      
+
       {/* Charts Section */}
       <div className="mb-8 grid gap-6 md:grid-cols-2">
         <Card>
@@ -644,9 +644,8 @@ export default function DocumentDashboard() {
                 <Plus className="h-4 w-4" />
                 <span>Tambah Dokumen Standar Layanan</span>
               </Button>
-              <Button className="flex items-center gap-2" href="https://drive.google.com/drive/folders/1MUIp-qF1PhUwXjWJnbSUm8-xwoULUWHy?usp=drive_link" target="_blank">
-                
-                <span>Contoh Dokumen</span>
+              <Button className="flex items-center gap-2">
+               <a href="https://drive.google.com/drive/folders/1MUIp-qF1PhUwXjWJnbSUm8-xwoULUWHy?usp=drive_link" target="_blank"><span>Contoh Dokumen</span></a>
               </Button>
             </div>
           </div>
@@ -985,8 +984,8 @@ export default function DocumentDashboard() {
                 placeholder="Masukkan jumlah pelaksana"
               />
             </div>
-            
-            
+
+
             <div className="grid gap-2">
               <Label htmlFor="dsl-file">File Dokumen (PDF)</Label>
               <Input id="dsl-file" type="file" accept=".pdf" onChange={(e) => handleFileChangeStl(e, setDslFile)} />
