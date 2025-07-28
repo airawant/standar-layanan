@@ -25,6 +25,39 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
+
+// Tambahkan tipe data dokumen
+interface SopDocument {
+  id: string
+  nama_sop: string
+  tanggal_sop: string
+  satuan_kerja: string
+  nomor_sop: string
+  tanggal_upload: string
+  fileuri: string
+}
+interface DslDocument {
+  id: string
+  nama_stl: string
+  dasar_hukum: string
+  satuan_kerja: string
+  persyaratan: string
+  jangka_waktu: string
+  biaya: string
+  produk_layanan: string
+  jml_pelaksana: string
+  tanggal_upload: string
+  fileuri: string
+  prosedur?: string
+  sarana?: string
+  kompetensi?: string
+  pengawasan?: string
+  pengaduan?: string
+  jaminan?: string
+  keamanan?: string
+  evaluasi?: string
+}
 
 export default function DocumentDashboard() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -32,10 +65,10 @@ export default function DocumentDashboard() {
   const [activeTab, setActiveTab] = useState("sop")
   const [sopModalOpen, setSopModalOpen] = useState(false)
   const [dslModalOpen, setDslModalOpen] = useState(false)
-  const [sopDocuments, setSopDocuments] = useState([])
-  const [dslDocuments, setDslDocuments] = useState([])
-  const [sopChartData, setSopChartData] = useState([])
-  const [dslChartData, setDslChartData] = useState([])
+  const [sopDocuments, setSopDocuments] = useState<SopDocument[]>([])
+  const [dslDocuments, setDslDocuments] = useState<DslDocument[]>([])
+  const [sopChartData, setSopChartData] = useState<{ name: string; value: number; color: string }[]>([])
+  const [dslChartData, setDslChartData] = useState<{ name: string; value: number; color: string }[]>([])
 
   // Detail view state
   const [isDetailView, setIsDetailView] = useState(false)
@@ -68,6 +101,25 @@ export default function DocumentDashboard() {
   // Add new state variables for the DSL form
   const [dslServiceName, setDslServiceName] = useState("")
   const [dslUnit, setDslUnit] = useState("")
+
+  // Tambahkan state untuk pagination
+  const [sopPage, setSopPage] = useState(1)
+  const [dslPage, setDslPage] = useState(1)
+  const SOP_PER_PAGE = 5
+  const DSL_PER_PAGE = 5
+
+  // Filter documents based on search query
+  const filteredSopDocuments = sopDocuments.filter((doc) =>
+    doc.nama_sop.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
+  const filteredDslDocuments = dslDocuments.filter(
+    (doc) =>
+      doc.dasar_hukum.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doc.produk_layanan.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
+  // Data yang sudah difilter dan dipotong sesuai halaman
+  const paginatedSopDocuments = filteredSopDocuments.slice((sopPage - 1) * SOP_PER_PAGE, sopPage * SOP_PER_PAGE)
+  const paginatedDslDocuments = filteredDslDocuments.slice((dslPage - 1) * DSL_PER_PAGE, dslPage * DSL_PER_PAGE)
 
   const API_URL =
     "https://script.google.com/macros/s/AKfycbxtiFSoJymPF5UZJ_Z6XjmQyqpKmduvE7lpRaurPM54XZ2lSPsusGZoXlrSDAb9G73d/exec" // Ganti dengan URL API Google Apps Script
@@ -373,16 +425,6 @@ export default function DocumentDashboard() {
       description: "Your document is being downloaded",
     })
   }
-
-  // Filter documents based on search query
-  const filteredSopDocuments = sopDocuments.filter((doc) =>
-    doc.nama_sop.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
-  const filteredDslDocuments = dslDocuments.filter(
-    (doc) =>
-      doc.dasar_hukum.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doc.produk_layanan.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
 
   // Custom legend renderer for donut charts
   const renderCustomLegend = (props) => {
@@ -695,8 +737,8 @@ export default function DocumentDashboard() {
                           Loading...
                         </TableCell>
                       </TableRow>
-                    ) : filteredSopDocuments.length > 0 ? (
-                      filteredSopDocuments.map((doc) => (
+                    ) : paginatedSopDocuments.length > 0 ? (
+                      paginatedSopDocuments.map((doc) => (
                         <TableRow key={doc.id}>
                           <TableCell className="font-medium">{doc.nama_sop}</TableCell>
                           <TableCell>{doc.tanggal_sop.split("T")[0]}</TableCell>
@@ -736,6 +778,37 @@ export default function DocumentDashboard() {
                     )}
                   </TableBody>
                 </Table>
+                {/* Pagination SOP */}
+                {filteredSopDocuments.length > SOP_PER_PAGE && (
+                  <div className="mt-4 flex justify-center">
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
+                            onClick={() => setSopPage((prev) => Math.max(prev - 1, 1))}
+                            aria-disabled={sopPage === 1}
+                          />
+                        </PaginationItem>
+                        {Array.from({ length: Math.ceil(filteredSopDocuments.length / SOP_PER_PAGE) }, (_, i) => (
+                          <PaginationItem key={i}>
+                            <PaginationLink
+                              isActive={sopPage === i + 1}
+                              onClick={() => setSopPage(i + 1)}
+                            >
+                              {i + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                          <PaginationNext
+                            onClick={() => setSopPage((prev) => Math.min(prev + 1, Math.ceil(filteredSopDocuments.length / SOP_PER_PAGE)))}
+                            aria-disabled={sopPage === Math.ceil(filteredSopDocuments.length / SOP_PER_PAGE)}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
+                )}
               </div>
             </TabsContent>
 
@@ -747,7 +820,6 @@ export default function DocumentDashboard() {
                       <TableHead>Nama Layanan</TableHead>
                       <TableHead>Dasar Hukum</TableHead>
                       <TableHead>Satuan Kerja</TableHead>
-                      <TableHead>Persyaratan</TableHead>
                       <TableHead>Jangka Waktu</TableHead>
                       <TableHead>Biaya/Tarif</TableHead>
                       <TableHead>Produk Layanan</TableHead>
@@ -764,13 +836,12 @@ export default function DocumentDashboard() {
                           Loading...
                         </TableCell>
                       </TableRow>
-                    ) : filteredDslDocuments.length > 0 ? (
-                      filteredDslDocuments.map((doc) => (
+                    ) : paginatedDslDocuments.length > 0 ? (
+                      paginatedDslDocuments.map((doc) => (
                         <TableRow key={doc.id}>
                           <TableCell className="font-medium">{doc.nama_stl}</TableCell>
                           <TableCell className="font-medium">{doc.dasar_hukum}</TableCell>
                           <TableCell>{doc.satuan_kerja}</TableCell>
-                          <TableCell>{doc.persyaratan}</TableCell>
                           <TableCell>{doc.jangka_waktu}</TableCell>
                           <TableCell>{doc.biaya}</TableCell>
                           <TableCell>{doc.produk_layanan}</TableCell>
@@ -809,6 +880,37 @@ export default function DocumentDashboard() {
                     )}
                   </TableBody>
                 </Table>
+                {/* Pagination DSL */}
+                {filteredDslDocuments.length > DSL_PER_PAGE && (
+                  <div className="mt-4 flex justify-center">
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
+                            onClick={() => setDslPage((prev) => Math.max(prev - 1, 1))}
+                            aria-disabled={dslPage === 1}
+                          />
+                        </PaginationItem>
+                        {Array.from({ length: Math.ceil(filteredDslDocuments.length / DSL_PER_PAGE) }, (_, i) => (
+                          <PaginationItem key={i}>
+                            <PaginationLink
+                              isActive={dslPage === i + 1}
+                              onClick={() => setDslPage(i + 1)}
+                            >
+                              {i + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                          <PaginationNext
+                            onClick={() => setDslPage((prev) => Math.min(prev + 1, Math.ceil(filteredDslDocuments.length / DSL_PER_PAGE)))}
+                            aria-disabled={dslPage === Math.ceil(filteredDslDocuments.length / DSL_PER_PAGE)}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
+                )}
               </div>
             </TabsContent>
           </Tabs>
